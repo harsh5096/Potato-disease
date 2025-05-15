@@ -33,8 +33,10 @@ async def ping():
     return "Hello, I am alive"
 
 def read_file_as_image(data) -> np.ndarray:
-    image = np.array(Image.open(BytesIO(data)))
-    return image
+    image = Image.open(BytesIO(data)).convert("RGB")
+    image = image.resize((256, 256))  # ✅ Must match model input size
+    return np.array(image)
+
 
 @app.post("/predict")
 async def predict(
